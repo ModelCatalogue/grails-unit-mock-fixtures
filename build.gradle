@@ -1,5 +1,15 @@
+buildscript {
+    repositories {
+        maven { url 'http://jcenter.bintray.com' }
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3'
+    }
+}
+apply plugin: 'bintray'
 apply plugin: 'groovy'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 repositories {
     mavenCentral()
@@ -14,3 +24,26 @@ dependencies {
 artifactId='grails-unit-mock-fixtures'
 project.group='uk.co.mc'
 project.version='1.0.0'
+
+publishing {
+  publications {
+      mavenStuff(MavenPublication) {
+          from components.java
+      }
+  }
+}
+
+bintray {
+    user = ''
+    key = ''
+    publications = ['mavenStuff'] // When uploading Maven-based publication files
+    pkg {
+        repo = 'ModelCatalogue'
+        userOrg = 'modelcatalogue' // an optional organization name when the repo belongs to one of the user's orgs
+        name = 'grails-unit-mock-fixtures'
+        desc = 'Grails unit testing fixtures'
+        licenses = ['MIT']
+        labels = ['grails', 'test']
+    }
+    dryRun = false // whether to run this as dry-run, without deploying
+}
